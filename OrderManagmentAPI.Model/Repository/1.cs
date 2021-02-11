@@ -6,5 +6,6 @@ namespace OrderManagmentAPI.Model.Repository
 {
     class _1
     {
+        public int MyProperty { get; set; }
     }
 }
