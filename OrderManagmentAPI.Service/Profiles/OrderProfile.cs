@@ -45,12 +45,12 @@ namespace OrderManagmentAPI.Service.Profiles
             CreateMap<Order, OrderDto>();
 
             CreateMap<OrderForCreationDto, Order>().ForMember(dest => dest.client, act =>
-            act.MapFrom(src => _clientRepository.findbyId(src.clientId)));
+            act.MapFrom(src => _clientRepository.findbyIdAsync(src.clientId)));
 
             CreateMap<Order, OrderForUpdateDto>();
 
             CreateMap<OrderForUpdateDto, Order>().ForMember(dest => dest.client, act =>
-            act.MapFrom(src => _clientRepository.findbyId(src.ClientId)));
+            act.MapFrom(src => _clientRepository.findbyIdAsync(src.ClientId)));
 
 
 

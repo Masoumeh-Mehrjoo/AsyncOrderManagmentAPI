@@ -18,6 +18,7 @@ using OrderManagmentAPI.Service.Interfaces;
 using OrderManagmentAPI.Service;
 using Newtonsoft.Json.Serialization;
 using OrderManagmentAPI.Service.Profiles;
+using Newtonsoft.Json;
 
 namespace OrderManagmentAPI
 {
@@ -38,11 +39,13 @@ namespace OrderManagmentAPI
                 setupAction.ReturnHttpNotAcceptable = true;
 
             })
+
                .AddXmlDataContractSerializerFormatters().AddNewtonsoftJson(setupAction =>
                {
                    setupAction.SerializerSettings.ContractResolver =
                    new CamelCasePropertyNamesContractResolver();
                })
+
                .ConfigureApiBehaviorOptions(setupAction =>
                   {
                       setupAction.InvalidModelStateResponseFactory = context =>
@@ -84,6 +87,8 @@ namespace OrderManagmentAPI
 
                   });
 
+
+
             services.AddScoped<OrderContext, OrderContext>();
             services.AddScoped<IClientRepository, ClientRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -97,13 +102,15 @@ namespace OrderManagmentAPI
             services.AddScoped(provider => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new OrderProfile(provider.GetService<IClientRepository>()));
-            }).CreateMapper());     
+            }).CreateMapper());
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

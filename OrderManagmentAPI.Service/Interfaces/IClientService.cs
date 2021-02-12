@@ -4,23 +4,24 @@ using OrderManagmentAPI.Service.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service.Interfaces
 {
     public interface IClientService
     {
-        public ClientDto InsertClient(ClientForCreationDto Client);
+        public Task<ClientDto> InsertClientAsync(ClientForCreationDto Client);
 
-        public IEnumerable<ClientDto> AllRows();
+        public Task<IEnumerable<ClientDto>> AllRowsAsync();
 
-        public ClientDto FindById(int Id);
+        public Task<ClientDto> FindByIdAsync(int Id);
 
-        public IEnumerable<ClientDto> SearchedRows(ClientResourceParameter ClientResourceParameter);
+        public Task<IEnumerable<ClientDto>> SearchedRowsAsync(ClientResourceParameter ClientResourceParameter);
 
-        public void DeleteClient(int Id);
+        public Task DeleteClientAsync(int Id);
 
-        public void EditClient( int ClientId,JsonPatchDocument <ClientForUpdateDto>  patchDocument);
-        public IEnumerable<OrderDto> OrdersofClient(int ClientId);
+        public Task EditClientAsync( int ClientId,JsonPatchDocument <ClientForUpdateDto>  patchDocument);
+        public Task<IEnumerable<OrderDto>> OrdersofClientAsync(int ClientId);
     }
 }
  

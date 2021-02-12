@@ -58,7 +58,7 @@ namespace OrderManagmentAPI.Controllers
 
         public ActionResult<OrderDto> PostOrder(OrderForCreationDto orderForCreationDto)
         {
-            if (_clientService.FindById(orderForCreationDto.clientId) == null)
+            if (_clientService.FindByIdAsync(orderForCreationDto.clientId) == null)
                 return NotFound("This ClientId doesnt exist.");
 
             var OrderToReturn = _orderService.InsertOrder(orderForCreationDto);

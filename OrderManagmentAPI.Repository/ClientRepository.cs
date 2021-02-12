@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Repository
 {
@@ -16,46 +17,48 @@ namespace OrderManagmentAPI.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public IEnumerable<Client> AllRows()
+        public async Task<IEnumerable<Client>> AllRowsAsync()
         {
-            return _context.Client.ToList();
+            return await _context.Client.ToListAsync();
         }
 
-        public void Delete(int Id)
+        public async Task DeleteAsync(int Id)
         {
-            var client = _context.Client.Where(x => x.id == Id).FirstOrDefault();
+            var client = await _context.Client.Where(x => x.id == Id).FirstOrDefaultAsync();
             _context.Client.Remove(client);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
 
-        public void Edit(Client entity)
+        public  void Edit(Client entity)
         {
-
+            
         }
 
-        public Client findbyId(int Id)
+        public async Task<Client> findbyIdAsync(int Id)
         {
 
-            var client = _context.Client.Where(x => x.id == Id).FirstOrDefault();
+            var client = await _context.Client.Where(x => x.id == Id).FirstOrDefaultAsync();
             return client;
         }
 
-        public void Insert(Client entity)
+        public async Task InsertAsync(Client entity)
         {
             _context.Client.Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Client> SearchedRows(ClientResourceParameter parameter)
+        public async Task<IEnumerable<Client>> SearchedRowsAsync(ClientResourceParameter parameter)
         {
             string searchQuery = parameter.SearchQuery;
 
-            IQueryable<Client> Client = _context.Client;
+            var ClientTask = Task.Run(() => _context.Client);
+            IQueryable<Client> Client = await ClientTask;
+
 
             if (!(parameter.CRMId == 0))
             {
-                Client = Client.Where(a => (a.CRMId == parameter.CRMId));
+                Client =  Client.Where( a => (a.CRMId == parameter.CRMId));
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
@@ -65,7 +68,7 @@ namespace OrderManagmentAPI.Repository
                 );
             }
 
-            return Client.ToList();
+            return await Client.ToListAsync();
 
         }
         public bool Save()
@@ -73,10 +76,17 @@ namespace OrderManagmentAPI.Repository
             return (_context.SaveChanges() >= 0);
         }
 
-        public List<Order> OrdersOfClient(int clientId)
+        //public List<Order> OrdersOfClient(int clientId)
+        //{
+        //    var orders = _context.Orders.Where(c => c.client.id == clientId).ToList();
+        //    return (orders);
+        //}
+
+        public async Task<List<Order>> OrdersOfClientAsync(int clientId)
         {
-            var orders = _context.Orders.Where(c => c.client.id == clientId).ToList();
-            return (orders);
+            var orders = await _context.Orders.Where(c => c.client.id == clientId).ToListAsync();
+            return orders;
+
         }
     }
 }

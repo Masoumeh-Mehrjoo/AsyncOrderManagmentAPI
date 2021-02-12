@@ -22,32 +22,33 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostClient(ClientForCreationDto Client)
+        public async Task<ActionResult> PostClient(ClientForCreationDto Client)
         {
-            var ClientToReturn = _clientService.InsertClient(Client);
+            var ClientToReturn = await _clientService.InsertClientAsync(Client);
 
             return CreatedAtRoute("GetClientBYId", new { Id = ClientToReturn.id }, ClientToReturn);
 
         }
         [HttpGet()]
-        public ActionResult<ClientDto> GetClients([FromQuery] ClientResourceParameter ClientResourceParameter)
+        public async Task<ActionResult<ClientDto>> GetClients([FromQuery] ClientResourceParameter ClientResourceParameter)
         {
             if (ClientResourceParameter == null && ClientResourceParameter.CRMId == 0)
             {
-                var AllClients = _clientService.AllRows();
+                var AllClients = await _clientService.AllRowsAsync();
                 return Ok(AllClients);
             }
             else
             {
-                var AllClients = _clientService.SearchedRows(ClientResourceParameter);
+                var AllClients = await _clientService.SearchedRowsAsync(ClientResourceParameter);
                 return Ok(AllClients);
+
             }
         }
 
         [HttpGet("{id}", Name = "GetClientBYId")]
-        public ActionResult GetClientBYId(int Id)
+        public async Task<ActionResult> GetClientBYId(int Id)
         {
-            var Client = _clientService.FindById(Id);
+            var Client = await _clientService.FindByIdAsync(Id);
             if (Client == null)
             {
                 return NotFound("This Client Id does not exist.");
@@ -58,31 +59,31 @@ namespace OrderManagmentAPI.Controllers
 
         [HttpGet]
         [Route("OrdersOfClient/{ClientId}")]
-        public ActionResult OrdersOfClient(int ClientId)
+        public async Task<ActionResult> OrdersOfClient(int ClientId)
         {
-            var orders = _clientService.OrdersofClient(ClientId);
+            var orders = await _clientService.OrdersofClientAsync(ClientId);
             return Ok(orders);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteClient(int Id)
+        public async Task<ActionResult> DeleteClient(int Id)
         {
-            var Client = _clientService.FindById(Id);
+            var Client = await _clientService.FindByIdAsync(Id);
             if (Client == null)
             {
                 return NotFound("This Client Id does not exist.");
 
             }
-            _clientService.DeleteClient(Id);
+            await _clientService.DeleteClientAsync(Id);
             return NoContent();
 
         }
         [HttpPatch("{id}")]
-        public ActionResult PatriallyUpdateClient(int Id, JsonPatchDocument<ClientForUpdateDto> patchDocument)
+        public async Task<ActionResult> PatriallyUpdateClient(int Id, JsonPatchDocument<ClientForUpdateDto> patchDocument)
         {
             try
             {
-                _clientService.EditClient(Id, patchDocument);
+                await _clientService.EditClientAsync(Id, patchDocument);
                 return NoContent();
             }
             catch (NotFoundException)

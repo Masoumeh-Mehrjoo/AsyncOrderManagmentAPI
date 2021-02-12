@@ -8,10 +8,11 @@ using OrderManagmentAPI.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service
 {
-    public class ClientService : IClientService
+    public  class ClientService : IClientService
     {
         IClientRepository _iclientRepository;
         private readonly IMapper _mapper;
@@ -20,11 +21,11 @@ namespace OrderManagmentAPI.Service
             this._iclientRepository = clientRepository;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        public IEnumerable<ClientDto> AllRows()
+        public async Task<IEnumerable<ClientDto>> AllRowsAsync()
         {
             try
             {
-                var clients = _iclientRepository.AllRows();
+                var clients = await _iclientRepository.AllRowsAsync();
 
                 var clientDto = _mapper.Map<IEnumerable<ClientDto>>(clients);
 
@@ -36,19 +37,19 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public ClientDto FindById(int Id)
+        public async Task<ClientDto> FindByIdAsync(int Id)
         {
-            var client = _iclientRepository.findbyId(Id);
+            var client = await _iclientRepository.findbyIdAsync(Id);
             var clientDto = _mapper.Map<ClientDto>(client);
             return (clientDto);
         }
 
-        public ClientDto InsertClient(ClientForCreationDto Client)
+        public async Task<ClientDto> InsertClientAsync(ClientForCreationDto Client)
         {
             try
             {
                 var client = _mapper.Map<Client>(Client);
-                _iclientRepository.Insert(client);
+               await _iclientRepository.InsertAsync(client);
 
                 var clientDto = _mapper.Map<ClientDto>(client);
                 return clientDto;
@@ -59,24 +60,24 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public IEnumerable<ClientDto> SearchedRows(ClientResourceParameter ClientResourceParameter)
+        public async Task<IEnumerable<ClientDto>> SearchedRowsAsync(ClientResourceParameter ClientResourceParameter)
         {
-            var clients = _iclientRepository.SearchedRows(ClientResourceParameter);
+            var clients = await _iclientRepository.SearchedRowsAsync(ClientResourceParameter);
             var clientDtos = _mapper.Map<IEnumerable<ClientDto>>(clients);
 
-            return (clientDtos);
+            return  (clientDtos);
         }
-        public void DeleteClient(int Id)
+        public async Task DeleteClientAsync(int Id)
         {
-            _iclientRepository.Delete(Id);
+            await _iclientRepository.DeleteAsync(Id);
 
         }
 
-        public void EditClient(int Id, JsonPatchDocument<ClientForUpdateDto> patchDocument)
+        public async Task EditClientAsync(int Id, JsonPatchDocument<ClientForUpdateDto> patchDocument)
         {
             try
             {
-                var client = _iclientRepository.findbyId(Id);
+                var client = await _iclientRepository.findbyIdAsync(Id);
 
                 var clientForUpdateDto = _mapper.Map<ClientForUpdateDto>(client);
                 patchDocument.ApplyTo(clientForUpdateDto);
@@ -92,9 +93,9 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public IEnumerable<OrderDto> OrdersofClient(int clientId)
+        public async Task<IEnumerable<OrderDto>> OrdersofClientAsync(int clientId)
         {
-            var Orders = _iclientRepository.OrdersOfClient(clientId);
+            var Orders = await _iclientRepository.OrdersOfClientAsync(clientId);
 
             var ListOfOrders =_mapper.Map<IEnumerable<OrderDto>>(Orders);
             return (ListOfOrders);
