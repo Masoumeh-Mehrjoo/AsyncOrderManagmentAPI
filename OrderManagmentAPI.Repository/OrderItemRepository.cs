@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Repository
 {
@@ -16,11 +17,11 @@ namespace OrderManagmentAPI.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public IEnumerable<OrderItem> AllRows()
+        public async Task<IEnumerable<OrderItem>> AllRowsAsync()
         {
             throw new NotImplementedException();
         }
-        public void Delete(int Id)
+        public async Task DeleteAsync(int Id)
         {
             var OrderItem = _context.OrderItems.Where(x => x.id == Id).FirstOrDefault();
             _context.OrderItems.Remove(OrderItem);
@@ -33,7 +34,7 @@ namespace OrderManagmentAPI.Repository
             _context.SaveChanges();
         }
 
-        public void Edit(OrderItem entity)
+        public async Task EditAsync(OrderItem entity)
         {
             var OldOrderItem = _context.OrderItems.AsNoTracking().Single(x => x.id == entity.id);
 
@@ -46,23 +47,23 @@ namespace OrderManagmentAPI.Repository
             _context.OrderItems.Update(entity);
         }
 
-        public OrderItem findbyId(int Id)
+        public async Task<OrderItem> findbyIdAsync(int Id)
         {
             return _context.OrderItems.Find(Id);
         }
 
-        public IEnumerable<OrderItem> FindOrderItemsofOrderId(int OrderId)
+        public async Task<IEnumerable<OrderItem>> FindOrderItemsofOrderIdAsync(int OrderId)
         {
             return _context.OrderItems.Where(x => x.OrderId == OrderId);
         }
 
-        public void Insert(OrderItem entity)
+        public async Task InsertAsync(OrderItem entity)
         {
             _context.OrderItems.Add(entity);
             _context.SaveChanges();
         }
 
-        public OrderItem InsertByOrderId(int OrderId, OrderItem entity)
+        public async Task<OrderItem> InsertByOrderIdAsync(int OrderId, OrderItem entity)
         {
             entity.OrderId = OrderId;
             Insert(entity);
@@ -80,7 +81,11 @@ namespace OrderManagmentAPI.Repository
             return (_context.SaveChanges() >= 0);
 
         }
-        public IEnumerable<OrderItem> SearchedRows(OrderItemResourceParameter parameter)
+        public void Edit(OrderItem entity)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<IEnumerable<OrderItem>> SearchedRowsAsync(OrderItemResourceParameter parameter)
         {
             throw new NotImplementedException();
         }

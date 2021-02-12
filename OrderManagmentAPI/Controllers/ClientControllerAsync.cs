@@ -13,10 +13,10 @@ namespace OrderManagmentAPI.Controllers
 {
     [Route("api/Client")]
     [ApiController]
-    public class ClientController : ControllerBase
+    public class ClientControllerAsync : ControllerBase
     {
         readonly IClientService _clientService;
-        public ClientController(IClientService clientService)
+        public ClientControllerAsync(IClientService clientService)
         {
             _clientService = clientService ?? throw new ArgumentNullException(nameof(clientService));
         }

@@ -7,6 +7,7 @@ using OrderManagmentAPI.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service
 {
@@ -21,15 +22,15 @@ namespace OrderManagmentAPI.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public ProductDto AddNewProduct(ProductDtoForCreation productDtoForCreation)
+        public async Task<ProductDto> AddNewProductAsync(ProductDtoForCreation productDtoForCreation)
         {
             try
             {
                 var Product = _mapper.Map<Product>(productDtoForCreation);
-                _iProductRepository.Insert(Product);
+                await _iProductRepository.InsertAsync(Product);
 
                 var productDto = _mapper.Map<ProductDto>(Product);
-                return productDto;
+                return  productDto;
             }
             catch (Exception)
             {
@@ -37,11 +38,11 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public IEnumerable<ProductDto> GetAll()
+        public async Task<IEnumerable<ProductDto>> GetAllAsync()
         {
             try
             {
-                var products = _iProductRepository.AllRows();
+                var products = await _iProductRepository.AllRowsAsync();
 
                 var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
 
@@ -54,17 +55,17 @@ namespace OrderManagmentAPI.Service
             }
         }
 
-        public ProductDto FindById(int Id)
+        public async Task<ProductDto> FindByIdAsync(int Id)
         {
-            var product = _iProductRepository.findbyId(Id);
+            var product = await _iProductRepository.findbyIdAsync(Id);
             var productDto = _mapper.Map<ProductDto>(product);
             return (productDto);
 
         }
 
-        public IEnumerable<ProductDto> SearchedRows(ProductResourceParameter productResourceParameter)
+        public async Task<IEnumerable<ProductDto>> SearchedRowsAsync(ProductResourceParameter productResourceParameter)
         {
-            var products = _iProductRepository.SearchedRows(productResourceParameter);
+            var products = await _iProductRepository.SearchedRowsAsync(productResourceParameter);
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
             return (productDtos);
         }

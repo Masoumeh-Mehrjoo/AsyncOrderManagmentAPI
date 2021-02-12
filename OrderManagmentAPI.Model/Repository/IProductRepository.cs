@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OrderManagmentAPI.Model.Repository
 {
-    public interface IProductRepository : IRepository<Product,int,ProductResourceParameter>
+    public interface IProductRepository : IRepositortyC<Product,int,ProductResourceParameter>
     {
 
     }

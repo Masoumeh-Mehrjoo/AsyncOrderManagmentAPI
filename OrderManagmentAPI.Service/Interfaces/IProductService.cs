@@ -3,18 +3,19 @@ using OrderManagmentAPI.Service.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service.Interfaces
 {
     public interface IProductService
     {
-        public ProductDto AddNewProduct(ProductDtoForCreation product);
+        public Task<ProductDto> AddNewProductAsync(ProductDtoForCreation product);
 
-        public IEnumerable<ProductDto> GetAll();
+        public Task<IEnumerable<ProductDto>> GetAllAsync();
 
-        public ProductDto FindById(int Id);
+        public Task<ProductDto> FindByIdAsync(int Id);
 
-        public IEnumerable<ProductDto> SearchedRows(ProductResourceParameter  productResourceParameter);
+        public Task<IEnumerable<ProductDto>> SearchedRowsAsync(ProductResourceParameter  productResourceParameter);
 
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using OrderManagmentAPI.Model;
 using OrderManagmentAPI.Model.Repository;
 
@@ -14,58 +16,58 @@ namespace OrderManagmentAPI.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public void Insert(Product entity)
+        public async Task InsertAsync(Product entity)
         {
             _context.Products.Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
+
 
         public Product Edit(int Id)
         {
             throw new NotImplementedException();
         }
 
-        public Product findbyId(int Id)
+        public async Task<Product> findbyIdAsync(int Id)
         {
             //  if ((Id == 0) || (_context.Products.Find(Id) == null))
             //  {
             //       throw new ArgumentNullException(nameof(Id));
             //  }
 
-            return _context.Products.Find(Id);
+            return await _context.Products.FindAsync(Id);
         }
 
-        public IEnumerable<Product> AllRows()
+        public async Task<IEnumerable<Product>> AllRowsAsync()
         {
-            return _context.Products.ToList();
+            return await _context.Products.ToListAsync();
         }
 
 
-        public IEnumerable<Product> SearchedRows(ProductResourceParameter parameter)
+        public async Task<IEnumerable<Product>> SearchedRowsAsync(ProductResourceParameter parameter)
         {
             string searchQuery = parameter.SearchQuery;
 
-            IQueryable<Product> Products = _context.Products;
+            var productTask = Task.Run(() => _context.Products);
+            IQueryable<Product> Products = await productTask;
 
             if (!(parameter.InventoryItemId == 0))
             {
-                Products = Products.Where(a => (a.InventoryItemId == parameter.InventoryItemId));
+                Products = await Task.Run(() => Products.Where(a => (a.InventoryItemId == parameter.InventoryItemId)));
             }
 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
-                Products = Products.Where(a => a.Name.Contains(searchQuery) ||
+                Products = await Task.Run(() => Products.Where(a => a.Name.Contains(searchQuery) ||
                 a.Description.Contains(searchQuery) || (a.CurrentPrice.ToString() == searchQuery) ||
-                a.SKU.Contains(searchQuery)
-                );
+                a.SKU.Contains(searchQuery)));
             }
 
-            return Products.ToList();
+            return await Products.ToListAsync();
 
         }
         public bool Save()
