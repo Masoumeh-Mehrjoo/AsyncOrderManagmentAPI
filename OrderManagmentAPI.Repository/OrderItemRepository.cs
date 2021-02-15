@@ -17,19 +17,16 @@ namespace OrderManagmentAPI.Repository
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<IEnumerable<OrderItem>> AllRowsAsync()
-        {
-            throw new NotImplementedException();
-        }
         public async Task DeleteAsync(int Id)
         {
-            var OrderItem = _context.OrderItems.Where(x => x.id == Id).FirstOrDefault();
+            var OrderItem = await _context.OrderItems.Where(x => x.id == Id).FirstOrDefaultAsync();
+
             _context.OrderItems.Remove(OrderItem);
 
             var OrderRepository = new OrderRepository(_context);
-            var UpdateOrder = OrderRepository.findbyId(OrderItem.OrderId);
+            var UpdateOrder = await OrderRepository.findbyIdAsync(OrderItem.OrderId);
 
-            OrderRepository.DeleteOrderItem(UpdateOrder, OrderItem);
+            await OrderRepository.DeleteOrderItemAsync(UpdateOrder, OrderItem);
 
             _context.SaveChanges();
         }
@@ -39,40 +36,40 @@ namespace OrderManagmentAPI.Repository
             var OldOrderItem = _context.OrderItems.AsNoTracking().Single(x => x.id == entity.id);
 
             var OrderRepository = new OrderRepository(_context);
-            var UpdateOrder = OrderRepository.findbyId(entity.OrderId);
+            var UpdateOrder = await OrderRepository.findbyIdAsync(entity.OrderId);
             entity = new OrderItem(entity.OrderId, entity.ProductId, entity.SoldPrice, entity.Count);
 
-            OrderRepository.EditOrderItem(UpdateOrder, OldOrderItem, entity);
+            await OrderRepository.EditOrderItemAsync(UpdateOrder, OldOrderItem, entity);
 
             _context.OrderItems.Update(entity);
         }
 
         public async Task<OrderItem> findbyIdAsync(int Id)
         {
-            return _context.OrderItems.Find(Id);
+            return await _context.OrderItems.FindAsync(Id);
         }
 
         public async Task<IEnumerable<OrderItem>> FindOrderItemsofOrderIdAsync(int OrderId)
         {
-            return _context.OrderItems.Where(x => x.OrderId == OrderId);
+            return await _context.OrderItems.Where(x => x.OrderId == OrderId).ToListAsync();
         }
 
         public async Task InsertAsync(OrderItem entity)
         {
             _context.OrderItems.Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<OrderItem> InsertByOrderIdAsync(int OrderId, OrderItem entity)
         {
             entity.OrderId = OrderId;
-            Insert(entity);
+            await InsertAsync(entity);
 
             var OrderRepository = new OrderRepository(_context);
-            var UpdateOrder = OrderRepository.findbyId(OrderId);
+            var UpdateOrder = await OrderRepository.findbyIdAsync(OrderId);
 
 
-            OrderRepository.AddNewOrderItem(UpdateOrder, entity);
+            await OrderRepository.AddNewOrderItemAsync(UpdateOrder, entity);
             return (entity);
         }
 
@@ -89,5 +86,10 @@ namespace OrderManagmentAPI.Repository
         {
             throw new NotImplementedException();
         }
+        public async Task<IEnumerable<OrderItem>> AllRowsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

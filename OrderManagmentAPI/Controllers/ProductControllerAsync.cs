@@ -14,11 +14,11 @@ namespace OrderManagmentAPI.Controllers
     [Route("api/Product")]
     [ApiController]
 
-    public class ProductController : ControllerBase
+    public class ProductControllerAsync : ControllerBase
     {
         readonly IProductService _ProductService;
 
-        public  ProductController(IProductService productService)
+        public  ProductControllerAsync(IProductService productService)
         {
             _ProductService = productService ?? throw new ArgumentNullException(nameof(productService));
         }

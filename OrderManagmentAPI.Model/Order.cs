@@ -48,7 +48,6 @@ namespace OrderManagmentAPI.Model
         public IEnumerable<OrderItem> OrderItems { get; set; }
         public Order AddOrderItemInCreationOrder(OrderItem newOrderItem)
         {
-
             List<OrderItem> orderItems = this.OrderItems.ToList();
             orderItems.Add(newOrderItem);
             var status = "CreateOrder";

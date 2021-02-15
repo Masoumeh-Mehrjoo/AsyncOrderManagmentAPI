@@ -4,15 +4,16 @@ using OrderManagmentAPI.Service.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service.Interfaces
 {
     public interface IOrderItemService
     {
-        public OrderItemDto InsertOrderItem(int orderId, OrderItemForCreation OrderItem);
-        public OrderItemDto FindById(int Id);
-        public void DeleteOrderItem(int Id);
-        public void EditOrderItem(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument);
-        public IEnumerable<OrderItemDto> OrderItemsOfOrder(int OrderId);
+        public Task<OrderItemDto> InsertOrderItemAsync(int orderId, OrderItemForCreation OrderItem);
+        public Task<OrderItemDto> FindByIdAsync(int Id);
+        public Task DeleteOrderItemAsync(int Id);
+        public Task EditOrderItemAsync(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument);
+        public Task<IEnumerable<OrderItemDto>> OrderItemsOfOrderAsync(int OrderId);
     }
 }

@@ -4,21 +4,22 @@ using OrderManagmentAPI.Service.Dto;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service.Interfaces
 {
      public interface IOrderService
     {
-        public OrderDto InsertOrder(OrderForCreationDto Order);
+        public Task <OrderDto> InsertOrderAsync(OrderForCreationDto Order);
 
-        public IEnumerable<OrderDto> AllRows();
+        public Task<IEnumerable<OrderDto>> AllRowsAsync();
 
-        public OrderDto FindById(int Id);
+        public Task<OrderDto> FindByIdAsync(int Id);
 
-        public IEnumerable<OrderDto> SearchedRows(OrderResourceParameter OrderResourceParameter);
+        public Task<IEnumerable<OrderDto>> SearchedRowsAsync(OrderResourceParameter OrderResourceParameter);
 
-        public void DeleteOrder(int Id);
+        public Task DeleteOrderAsync(int Id);
 
-        public void EditOrder(int OrderId, JsonPatchDocument<OrderForUpdateDto> patchDocument);
+        public Task EditOrderAsync(int OrderId, JsonPatchDocument<OrderForUpdateDto> patchDocument);
     }
 }

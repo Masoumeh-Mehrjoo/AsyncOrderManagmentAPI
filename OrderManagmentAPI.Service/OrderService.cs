@@ -8,6 +8,7 @@ using OrderManagmentAPI.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service
 {
@@ -24,12 +25,12 @@ namespace OrderManagmentAPI.Service
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
         }
-        public IEnumerable<OrderDto> AllRows()
+        public async Task<IEnumerable<OrderDto>> AllRowsAsync()
         {
             try
             {
-                var Rep_Orders = _OrderRepository.AllRows();
-             
+                var Rep_Orders = await _OrderRepository.AllRowsAsync();
+
                 var OrdersToReturn = _mapper.Map<IEnumerable<OrderDto>>(Rep_Orders);
                 return (OrdersToReturn);
             }
@@ -39,48 +40,44 @@ namespace OrderManagmentAPI.Service
                 throw;
             }
         }
-
-        public void DeleteOrder(int Id)
+        public async Task DeleteOrderAsync(int Id)
         {
             throw new NotImplementedException();
         }
-
-        public void EditOrder(int OrderId, JsonPatchDocument<OrderForUpdateDto> patchDocument)
+        public async Task EditOrderAsync(int OrderId, JsonPatchDocument<OrderForUpdateDto> patchDocument)
         {
-            //  try
-            // {
-            var Order = _OrderRepository.findbyId(OrderId);
+            try
+            {
 
-            var OrderTopatch = _mapper.Map<OrderForUpdateDto>(Order);
-            patchDocument.ApplyTo(OrderTopatch);
+                var Order = await _OrderRepository.findbyIdAsync(OrderId);
 
-            _mapper.Map(OrderTopatch, Order);
-            _OrderRepository.Edit(Order);
+                var OrderTopatch = _mapper.Map<OrderForUpdateDto>(Order);
+                patchDocument.ApplyTo(OrderTopatch);
 
-            _OrderRepository.Save();
-            // }
-            // catch (Exception)
-            // {
-            //   throw new NotFoundException();
-            // }
+                _mapper.Map(OrderTopatch, Order);
+                _OrderRepository.Edit(Order);
+                _OrderRepository.Save();
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
         }
-
-        public OrderDto FindById(int Id)
+        public async Task<OrderDto> FindByIdAsync(int Id)
         {
-            var RepOrder = _OrderRepository.findbyId(Id);
+            var RepOrder = await _OrderRepository.findbyIdAsync(Id);
             var OrderToReturn = _mapper.Map<OrderDto>(RepOrder);
             return (OrderToReturn);
 
 
         }
-
-        public OrderDto InsertOrder(OrderForCreationDto orderForCreationDto)
+        public async Task<OrderDto> InsertOrderAsync(OrderForCreationDto orderForCreationDto)
         {
             try
             {
                 var Order = _mapper.Map<Order>(orderForCreationDto);
-                _OrderRepository.Insert(Order);
+                await _OrderRepository.InsertAsync(Order);
 
                 var OrderToReturn = _mapper.Map<OrderDto>(Order);
                 return OrderToReturn;
@@ -91,8 +88,7 @@ namespace OrderManagmentAPI.Service
             }
 
         }
-
-        public IEnumerable<OrderDto> SearchedRows(OrderResourceParameter OrderResourceParameter)
+        public async Task<IEnumerable<OrderDto>> SearchedRowsAsync(OrderResourceParameter OrderResourceParameter)
         {
             throw new NotImplementedException();
         }

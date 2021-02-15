@@ -1,9 +1,11 @@
-﻿using OrderManagmentAPI.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using OrderManagmentAPI.Model;
 using OrderManagmentAPI.Model.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Repository
 {
@@ -18,74 +20,78 @@ namespace OrderManagmentAPI.Repository
             _orderItemRepository = new OrderItemRepository(_context);
 
         }
-        public IEnumerable<Order> AllRows()
+        public async Task<IEnumerable<Order>> AllRowsAsync()
         {
-            return _context.Orders.ToList();
+            return await _context.Orders.ToListAsync();
         }
 
-        public void Delete(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteOrderItem(Order entity, OrderItem orderItem)
+        
+        public async Task DeleteOrderItemAsync(Order entity, OrderItem orderItem)
         {
             entity = entity.DeleteOrderItem(orderItem);
             _context.Orders.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void AddNewOrderItem(Order entity, OrderItem orderItem)
+        public async Task AddNewOrderItemAsync(Order entity, OrderItem orderItem)
         {
             entity = entity.AddNewOrderItem(orderItem);
 
             _context.Orders.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
 
-        public Order findbyId(int Id)
+        public async Task<Order> findbyIdAsync(int Id)
         {
-            return _context.Orders.Find(Id);
+            return await _context.Orders.FindAsync(Id);
         }
 
-        public void Insert(Order entity)
+        public async Task InsertAsync(Order entity)
         {
             foreach (var orderitem in entity.OrderItems)
                 entity = entity.AddOrderItemInCreationOrder(orderitem);
 
             _context.Orders.Add(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
 
-        public void InsertOrderWithOrderItem(Order order)
-        {
-            throw new NotImplementedException();
-        }
+        
+        
 
         public bool Save()
         {
             return (_context.SaveChanges() >= 0);
         }
 
-        public IEnumerable<Order> SearchedRows(OrderResourceParameter parameter)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public void Edit(Order entity)
         {
-            
+
         }
 
-        public void EditOrderItem(Order entity, OrderItem OldOrderItem, OrderItem NewOrderItem)
+        public async Task EditOrderItemAsync(Order entity, OrderItem OldOrderItem, OrderItem NewOrderItem)
         {
             entity = entity.EditOrderItem(OldOrderItem, NewOrderItem);
 
             _context.Orders.Update(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
         }
+        public async Task<IEnumerable<Order>> SearchedRowsAsync(OrderResourceParameter parameter)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task InsertOrderWithOrderItemAsync(Order order)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task DeleteAsync(int Id)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }

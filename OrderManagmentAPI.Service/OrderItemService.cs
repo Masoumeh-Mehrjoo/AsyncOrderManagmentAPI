@@ -8,6 +8,7 @@ using OrderManagmentAPI.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service
 {
@@ -21,21 +22,21 @@ namespace OrderManagmentAPI.Service
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _orderItemRepository = orderItemRepository ?? throw new ArgumentNullException(nameof(orderItemRepository));
         }
-        public void DeleteOrderItem(int Id)
+        public async Task DeleteOrderItemAsync(int Id)
         {
-            _orderItemRepository.Delete(Id);
+            await _orderItemRepository.DeleteAsync(Id);
         }
-        public void EditOrderItem(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
+        public async Task EditOrderItemAsync(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
             try
             {
-                var OrderItem = _orderItemRepository.findbyId(Id);
+                var OrderItem = await _orderItemRepository.findbyIdAsync(Id);
 
                 var OrderItemForUpdateDto = _mapper.Map<OrderItemForUpdate>(OrderItem);
                 patchDocument.ApplyTo(OrderItemForUpdateDto);
 
                 _mapper.Map(OrderItemForUpdateDto, OrderItem);
-                _orderItemRepository.Edit(OrderItem);
+                await _orderItemRepository.EditAsync(OrderItem);
 
                 _orderItemRepository.Save();
             }
@@ -44,11 +45,11 @@ namespace OrderManagmentAPI.Service
                 throw new NotFoundException();
             }
         }
-        public OrderItemDto FindById(int Id)
+        public async Task<OrderItemDto> FindByIdAsync(int Id)
         {
             try
             {
-                var orderItem = _orderItemRepository.findbyId(Id);
+                var orderItem = await _orderItemRepository.findbyIdAsync(Id);
                 var OrderItemDto = _mapper.Map<OrderItemDto>(orderItem);
                 return (OrderItemDto);
             }
@@ -57,18 +58,18 @@ namespace OrderManagmentAPI.Service
                 throw new NotFoundException();
             }
         }
-        public OrderItemDto InsertOrderItem(int orderId, OrderItemForCreation OrderItem)
+        public async Task<OrderItemDto> InsertOrderItemAsync(int orderId, OrderItemForCreation OrderItem)
         {
             var orderItem = _mapper.Map<OrderItem>(OrderItem);
-            _orderItemRepository.InsertByOrderId(orderId, orderItem);
+            await _orderItemRepository.InsertByOrderIdAsync(orderId, orderItem);
 
             var OrderItemDto = _mapper.Map<OrderItemDto>(orderItem);
             return OrderItemDto;
 
         }
-        public IEnumerable<OrderItemDto> OrderItemsOfOrder(int OrderId)
+        public async Task<IEnumerable<OrderItemDto>> OrderItemsOfOrderAsync(int OrderId)
         {
-            var orderItems = _orderItemRepository.FindOrderItemsofOrderId(OrderId);
+            var orderItems = await _orderItemRepository.FindOrderItemsofOrderIdAsync(OrderId);
             var OrderItemsDto = _mapper.Map<IEnumerable<OrderItemDto>>(orderItems);
 
             return (OrderItemsDto);

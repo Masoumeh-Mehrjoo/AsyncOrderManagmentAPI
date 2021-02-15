@@ -6,6 +6,7 @@ using System.Text;
 using OrderManagmentAPI.Repository;
 using OrderManagmentAPI.Model.Repository;
 using OrderManagmentAPI.Model;
+using System.Threading.Tasks;
 
 namespace OrderManagmentAPI.Service.Profiles
 {
@@ -44,13 +45,13 @@ namespace OrderManagmentAPI.Service.Profiles
             CreateMap<OrderDto, Order>();
             CreateMap<Order, OrderDto>();
 
-            CreateMap<OrderForCreationDto, Order>().ForMember(dest => dest.client, act =>
-            act.MapFrom(src => _clientRepository.findbyIdAsync(src.clientId)));
+            CreateMap<OrderForCreationDto, Order>() .ForMember(dest => dest.client, act =>
+            act.MapFrom(src => _clientRepository.findbyIdAsync(src.clientId).Result));
 
             CreateMap<Order, OrderForUpdateDto>();
 
             CreateMap<OrderForUpdateDto, Order>().ForMember(dest => dest.client, act =>
-            act.MapFrom(src => _clientRepository.findbyIdAsync(src.ClientId)));
+            act.MapFrom(src => _clientRepository.findbyIdAsync(src.ClientId).Result));
 
 
 

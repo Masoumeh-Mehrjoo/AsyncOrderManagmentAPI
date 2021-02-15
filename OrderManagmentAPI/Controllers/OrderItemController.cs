@@ -24,9 +24,9 @@ namespace OrderManagmentAPI.Controllers
             _OrderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
         [HttpGet("{id}", Name = "GetOrderItemBYId")]
-        public ActionResult GetOrderItemBYId(int Id)
+        public async Task<ActionResult> GetOrderItemBYId(int Id)
         {
-            var orderItem = _OrderItemService.FindById(Id);
+            var orderItem =await _OrderItemService.FindByIdAsync(Id);
             if (orderItem == null)
             {
                 return NotFound("This Client Id does not exist.");
@@ -36,37 +36,37 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpPost()]
-        public ActionResult PostOrderItem(int OrderId, OrderItemForCreation orderItem)
+        public async Task<ActionResult> PostOrderItem(int OrderId, OrderItemForCreation orderItem)
         {
-            if (_OrderService.FindById(OrderId) == null)
+            if (_OrderService.FindByIdAsync(OrderId) == null)
                 return NotFound("This OrderId doesnt exist.");
 
-            var PostedOrderItem = _OrderItemService.InsertOrderItem(OrderId, orderItem);
+            var PostedOrderItem =await _OrderItemService.InsertOrderItemAsync(OrderId, orderItem);
             return Ok(PostedOrderItem);
 
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteOrderItem(int OrderId, int Id)
+        public async Task<ActionResult> DeleteOrderItem(int OrderId, int Id)
         {
-            if (_OrderService.FindById(OrderId) == null)
+            if (_OrderService.FindByIdAsync(OrderId) == null)
                 return NotFound("This OrderId doesnt exist.");
 
-            var orderItem = _OrderItemService.FindById(Id);
+            var orderItem =await _OrderItemService.FindByIdAsync(Id);
 
             if ((orderItem == null) || (OrderId != orderItem.OrderId))
                 return NotFound("This OrderaItem Id or Order Id does not exist.");
 
-            _OrderItemService.DeleteOrderItem(Id);
+            await _OrderItemService.DeleteOrderItemAsync(Id);
             return Ok("This OrderItem Deleted");
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PatriallyUpdateClient(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
+        public async Task<ActionResult> PatriallyUpdateClient(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
             try
             {
-                _OrderItemService.EditOrderItem(Id, patchDocument);
+              await  _OrderItemService.EditOrderItemAsync(Id, patchDocument);
                 return NoContent();
             }
             catch (NotFoundException)
