@@ -64,9 +64,11 @@ namespace OrderManagmentAPI.Repository
             return await Client.ToListAsync();
 
         }
-        public bool Save()
+        public async Task<bool> Save()
         {
-            return (_context.SaveChanges() >= 0);
+            var Result = await _context.SaveChangesAsync();
+            return (Result >= 0);
+
         }
         public async Task<List<Order>> OrdersOfClientAsync(int clientId)
         {

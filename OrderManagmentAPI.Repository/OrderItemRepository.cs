@@ -33,15 +33,15 @@ namespace OrderManagmentAPI.Repository
 
         public async Task EditAsync(OrderItem entity)
         {
-            var OldOrderItem = _context.OrderItems.AsNoTracking().Single(x => x.id == entity.id);
+            entity.calculateEditedValue(entity);
+            var OldOrderItemFromDB = _context.OrderItems.AsNoTracking().Single(x => x.id == entity.id);
 
             var OrderRepository = new OrderRepository(_context);
             var UpdateOrder = await OrderRepository.findbyIdAsync(entity.OrderId);
-            entity = new OrderItem(entity.OrderId, entity.ProductId, entity.SoldPrice, entity.Count);
+            await OrderRepository.EditOrderItemAsync(UpdateOrder, OldOrderItemFromDB, entity);
 
-            await OrderRepository.EditOrderItemAsync(UpdateOrder, OldOrderItem, entity);
+            OldOrderItemFromDB = entity;
 
-            _context.OrderItems.Update(entity);
         }
 
         public async Task<OrderItem> findbyIdAsync(int Id)
@@ -73,9 +73,10 @@ namespace OrderManagmentAPI.Repository
             return (entity);
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
-            return (_context.SaveChanges() >= 0);
+            var Result = await _context.SaveChangesAsync();
+            return (Result >= 0);
 
         }
         public void Edit(OrderItem entity)

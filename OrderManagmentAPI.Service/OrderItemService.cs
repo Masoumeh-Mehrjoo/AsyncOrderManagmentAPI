@@ -28,22 +28,22 @@ namespace OrderManagmentAPI.Service
         }
         public async Task EditOrderItemAsync(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
-            try
-            {
-                var OrderItem = await _orderItemRepository.findbyIdAsync(Id);
+            //try
+            //{
+            var OrderItem = await _orderItemRepository.findbyIdAsync(Id);
 
-                var OrderItemForUpdateDto = _mapper.Map<OrderItemForUpdate>(OrderItem);
-                patchDocument.ApplyTo(OrderItemForUpdateDto);
+            var OrderItemForUpdateDto = _mapper.Map<OrderItemForUpdate>(OrderItem);
+            patchDocument.ApplyTo(OrderItemForUpdateDto);
 
-                _mapper.Map(OrderItemForUpdateDto, OrderItem);
-                await _orderItemRepository.EditAsync(OrderItem);
+            _mapper.Map(OrderItemForUpdateDto, OrderItem);
 
-                _orderItemRepository.Save();
-            }
-            catch (Exception)
-            {
-                throw new NotFoundException();
-            }
+            await _orderItemRepository.EditAsync(OrderItem);
+            await _orderItemRepository.Save();
+            //}
+            //catch (Exception)
+            //{
+            //    throw new NotFoundException();
+            //}
         }
         public async Task<OrderItemDto> FindByIdAsync(int Id)
         {

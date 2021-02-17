@@ -86,7 +86,7 @@ namespace OrderManagmentAPI.Model
 
             Count = (this.Count - OldOrderItem.Count) + NewOrderItem.Count;
 
-            TotalPrice = (this.TotalPrice - OldOrderItem.TotalPrice) - NewOrderItem.TotalPrice;
+            TotalPrice = (this.TotalPrice - OldOrderItem.TotalPrice) + NewOrderItem.TotalPrice;
             Tax = (float)(TotalPrice * 0.03);
 
             SetFinalPrice();

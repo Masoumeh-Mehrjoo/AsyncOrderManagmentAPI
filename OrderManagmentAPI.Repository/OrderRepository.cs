@@ -57,15 +57,17 @@ namespace OrderManagmentAPI.Repository
 
         }
 
-        
-        
 
-        public bool Save()
+
+
+        public async Task<bool> Save()
         {
-            return (_context.SaveChanges() >= 0);
+            var Result = await _context.SaveChangesAsync();
+            return (Result >= 0);
+
         }
 
-        
+
         public void Edit(Order entity)
         {
 

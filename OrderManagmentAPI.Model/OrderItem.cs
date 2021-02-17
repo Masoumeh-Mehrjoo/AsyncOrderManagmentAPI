@@ -19,6 +19,11 @@ namespace OrderManagmentAPI.Model
             Count = count;
             SetTotalPrice();
         }
+        public OrderItem calculateEditedValue( OrderItem OrderItem)
+        {
+            OrderItem.TotalPrice = OrderItem.SoldPrice * OrderItem.Count;
+            return OrderItem;
+        }
 
         public int OrderId { get; set; }
         public int ProductId { get; set; }

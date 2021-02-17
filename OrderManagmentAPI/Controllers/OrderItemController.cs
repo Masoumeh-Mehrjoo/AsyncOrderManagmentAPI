@@ -62,11 +62,14 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PatriallyUpdateClient(int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
+        public async Task<ActionResult> PatriallyUpdateClient(int OrderId,int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
             try
             {
-              await  _OrderItemService.EditOrderItemAsync(Id, patchDocument);
+                if (_OrderService.FindByIdAsync(OrderId) == null )
+                    return NotFound("This OrderId doesnt exist.");
+
+                await  _OrderItemService.EditOrderItemAsync(Id, patchDocument);
                 return NoContent();
             }
             catch (NotFoundException)

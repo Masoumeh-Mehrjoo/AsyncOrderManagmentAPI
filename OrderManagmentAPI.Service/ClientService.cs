@@ -85,7 +85,7 @@ namespace OrderManagmentAPI.Service
                 _mapper.Map(clientForUpdateDto, client);
                 _iclientRepository.Edit(client);
 
-                _iclientRepository.Save();
+               await  _iclientRepository.Save();
             }
             catch (Exception)
             {
