@@ -14,17 +14,17 @@ namespace OrderManagmentAPI.Controllers
 {
     [Route("api/Order/{OrderId}/OrderItems")]
     [ApiController]
-    public class OrderItemController : ControllerBase
+    public class OrderItemControllerAsync : ControllerBase
     {
         IOrderItemService _OrderItemService;
         IOrderService _OrderService;
-        public OrderItemController(IOrderItemService orderItemService, IOrderService orderService)
+        public OrderItemControllerAsync(IOrderItemService orderItemService, IOrderService orderService)
         {
             _OrderItemService = orderItemService ?? throw new ArgumentNullException(nameof(orderItemService));
             _OrderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
         [HttpGet("{id}", Name = "GetOrderItemBYId")]
-        public async Task<ActionResult> GetOrderItemBYId(int Id)
+        public async Task<ActionResult> GetOrderItemBYIdAsync(int Id)
         {
             var orderItem =await _OrderItemService.FindByIdAsync(Id);
             if (orderItem == null)
@@ -36,7 +36,7 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpPost()]
-        public async Task<ActionResult> PostOrderItem(int OrderId, OrderItemForCreation orderItem)
+        public async Task<ActionResult> PostOrderItemAsync(int OrderId, OrderItemForCreation orderItem)
         {
             if (_OrderService.FindByIdAsync(OrderId) == null)
                 return NotFound("This OrderId doesnt exist.");
@@ -47,7 +47,7 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteOrderItem(int OrderId, int Id)
+        public async Task<ActionResult> DeleteOrderItemAsync(int OrderId, int Id)
         {
             if (_OrderService.FindByIdAsync(OrderId) == null)
                 return NotFound("This OrderId doesnt exist.");
@@ -62,7 +62,7 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PatriallyUpdateClient(int OrderId,int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
+        public async Task<ActionResult> PatriallyUpdateClientAsync(int OrderId,int Id, JsonPatchDocument<OrderItemForUpdate> patchDocument)
         {
             try
             {

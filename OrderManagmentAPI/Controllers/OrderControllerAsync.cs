@@ -30,7 +30,7 @@ namespace OrderManagmentAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders([FromQuery] OrderResourceParameter orderResourceParameters)
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrdersAsync([FromQuery] OrderResourceParameter orderResourceParameters)
         {
 
             var AllOrders = await _orderService.AllRowsAsync();
@@ -38,7 +38,7 @@ namespace OrderManagmentAPI.Controllers
 
         }
         [HttpGet("{id}", Name = "GetOrderById")]
-        public async Task<ActionResult> GetOrderById(int Id)
+        public async Task<ActionResult> GetOrderByIdAsync(int Id)
         {
             var order = await _orderService.FindByIdAsync(Id);
 
@@ -57,7 +57,7 @@ namespace OrderManagmentAPI.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<OrderDto>> PostOrder(OrderForCreationDto orderForCreationDto)
+        public async Task<ActionResult<OrderDto>> PostOrdeAsyncr(OrderForCreationDto orderForCreationDto)
         {
             if ((await _clientService.FindByIdAsync(orderForCreationDto.clientId)) == null)
                 return NotFound("This ClientId doesnt exist.");
@@ -67,7 +67,7 @@ namespace OrderManagmentAPI.Controllers
 
         }
         [HttpPatch("{id}")]
-        public async Task<ActionResult> PatriallyUpdateOrder(int Id, JsonPatchDocument<OrderForUpdateDto> patchDocument)
+        public async Task<ActionResult> PatriallyUpdateOrderAsync(int Id, JsonPatchDocument<OrderForUpdateDto> patchDocument)
         {
             try
             {
