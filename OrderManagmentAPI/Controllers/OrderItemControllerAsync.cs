@@ -32,7 +32,7 @@ namespace OrderManagmentAPI.Controllers
                 return NotFound("This Client Id does not exist.");
             }
 
-            return Ok(orderItem);
+            return new JsonResult(orderItem);
         }
 
         [HttpPost()]
@@ -42,7 +42,7 @@ namespace OrderManagmentAPI.Controllers
                 return NotFound("This OrderId doesnt exist.");
 
             var PostedOrderItem =await _OrderItemService.InsertOrderItemAsync(OrderId, orderItem);
-            return Ok(PostedOrderItem);
+            return new JsonResult(PostedOrderItem);
 
         }
 

@@ -70,7 +70,7 @@ namespace OrderManagmentAPI.Repository
             return await Products.ToListAsync();
 
         }
-        public async Task<bool> Save()
+        public async Task<bool> SaveAsync()
         {
             var Result = await _context.SaveChangesAsync();
             return (Result >= 0);

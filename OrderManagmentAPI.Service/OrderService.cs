@@ -56,7 +56,7 @@ namespace OrderManagmentAPI.Service
 
                 _mapper.Map(OrderTopatch, Order);
                 _OrderRepository.Edit(Order);
-                await _OrderRepository.Save();
+                await _OrderRepository.SaveAsync();
             }
             catch (Exception)
             {

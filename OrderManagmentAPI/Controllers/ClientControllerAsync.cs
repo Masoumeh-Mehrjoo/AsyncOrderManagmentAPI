@@ -35,12 +35,12 @@ namespace OrderManagmentAPI.Controllers
             if (ClientResourceParameter == null && ClientResourceParameter.CRMId == 0)
             {
                 var AllClients = await _clientService.AllRowsAsync();
-                return Ok(AllClients);
+                return new JsonResult(AllClients);
             }
             else
             {
                 var AllClients = await _clientService.SearchedRowsAsync(ClientResourceParameter);
-                return Ok(AllClients);
+                return new JsonResult(AllClients);
 
             }
         }
@@ -54,7 +54,7 @@ namespace OrderManagmentAPI.Controllers
                 return NotFound("This Client Id does not exist.");
             }
 
-            return Ok(Client);
+            return new JsonResult(Client);
         }
 
         [HttpGet]
@@ -62,7 +62,7 @@ namespace OrderManagmentAPI.Controllers
         public async Task<ActionResult> OrdersOfClient(int ClientId)
         {
             var orders = await _clientService.OrdersofClientAsync(ClientId);
-            return Ok(orders);
+            return new JsonResult(orders);
         }
 
         [HttpDelete("{id}")]

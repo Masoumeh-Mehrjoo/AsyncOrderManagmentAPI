@@ -127,6 +127,13 @@ namespace OrderManagmentAPI
                 });
             }
             app.UseRouting();
+         
+            app.UseCors(x => x
+              .AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+
+            app.UseHttpsRedirection();
 
             //app.UseAuthorization();
 

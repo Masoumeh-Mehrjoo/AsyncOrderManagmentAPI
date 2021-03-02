@@ -13,7 +13,7 @@ namespace OrderManagmentAPI.Model.Repository
         public Task<T> findbyIdAsync(J Id);
         public Task<IEnumerable<T>> AllRowsAsync();
         public Task<IEnumerable<T>> SearchedRowsAsync(S parameter);
-        public Task<bool> Save();
+        public Task<bool> SaveAsync();
 
     }
 }

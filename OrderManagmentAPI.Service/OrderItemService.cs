@@ -38,7 +38,7 @@ namespace OrderManagmentAPI.Service
             _mapper.Map(OrderItemForUpdateDto, OrderItem);
 
             await _orderItemRepository.EditAsync(OrderItem);
-            await _orderItemRepository.Save();
+            await _orderItemRepository.SaveAsync();
             //}
             //catch (Exception)
             //{

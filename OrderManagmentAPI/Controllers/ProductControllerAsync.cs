@@ -44,7 +44,8 @@ namespace OrderManagmentAPI.Controllers
                 ProductDtos = await _ProductService.SearchedRowsAsync(productResourceParameter);
             }
 
-            return Ok(ProductDtos);
+            return new JsonResult(ProductDtos);
+            
         }
 
         [HttpGet("{id}", Name = "GetProductBYId")]
@@ -57,7 +58,7 @@ namespace OrderManagmentAPI.Controllers
                 return NotFound("This Product Id is not exist in database.");
             }
 
-            return Ok(Product);
+            return new JsonResult(Product);
         }
     }
 }
