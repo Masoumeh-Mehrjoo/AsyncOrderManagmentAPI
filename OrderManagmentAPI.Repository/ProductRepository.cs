@@ -23,14 +23,11 @@ namespace OrderManagmentAPI.Repository
         }
         public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var Product = await _context.Products.Where(x => x.id == id).FirstOrDefaultAsync();
+            _context.Products.Remove(Product);
+            await _context.SaveChangesAsync();
         }
-
-
-        public Product Edit(int Id)
-        {
-            throw new NotImplementedException();
-        }
+               
 
         public async Task<Product> findbyIdAsync(int Id)
         {
@@ -78,7 +75,7 @@ namespace OrderManagmentAPI.Repository
         }
         public void Edit(Product entity)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

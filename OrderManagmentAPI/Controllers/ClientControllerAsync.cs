@@ -83,7 +83,7 @@ namespace OrderManagmentAPI.Controllers
         {
             try
             {
-                await _clientService.EditClientAsync(Id, patchDocument);
+                await     _clientService.EditClientAsync(Id, patchDocument);
                 return NoContent();
             }
             catch (NotFoundException)

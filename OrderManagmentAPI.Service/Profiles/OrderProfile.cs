@@ -29,6 +29,10 @@ namespace OrderManagmentAPI.Service.Profiles
             CreateMap<Model.Product, ProductDto>();
             CreateMap<ProductDtoForCreation, Product>();
 
+            CreateMap<Model.Product,ProductDtoForUpdate>();
+            CreateMap<ProductDtoForUpdate, Product>();
+
+
             /**************OrderItem******/
             CreateMap<OrderItem, OrderItemDto>();
             CreateMap<OrderItemDto, OrderItem>();

@@ -39,13 +39,12 @@ namespace OrderManagmentAPI
                 setupAction.ReturnHttpNotAcceptable = true;
 
             })
-
-               .AddXmlDataContractSerializerFormatters().AddNewtonsoftJson(setupAction =>
-               {
-                   setupAction.SerializerSettings.ContractResolver =
-                   new CamelCasePropertyNamesContractResolver();
-               })
-
+               //   .AddXmlDataContractSerializerFormatters().AddNewtonsoftJson(setupAction =>
+               //             {
+               //              setupAction.SerializerSettings.ContractResolver =
+               //             new CamelCasePropertyNamesContractResolver();
+               //       })
+               .AddNewtonsoftJson()
                .ConfigureApiBehaviorOptions(setupAction =>
                   {
                       setupAction.InvalidModelStateResponseFactory = context =>
@@ -86,8 +85,7 @@ namespace OrderManagmentAPI
                       };
 
                   });
-
-
+            
 
             services.AddScoped<OrderContext, OrderContext>();
             services.AddScoped<IClientRepository, ClientRepository>();
@@ -127,7 +125,7 @@ namespace OrderManagmentAPI
                 });
             }
             app.UseRouting();
-         
+
             app.UseCors(x => x
               .AllowAnyOrigin()
               .AllowAnyMethod()

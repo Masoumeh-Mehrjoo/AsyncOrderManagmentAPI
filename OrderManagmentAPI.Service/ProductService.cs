@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using OrderManagmentAPI.Model;
 using OrderManagmentAPI.Model.Repository;
 using OrderManagmentAPI.Repository;
@@ -68,6 +69,49 @@ namespace OrderManagmentAPI.Service
             var products = await _iProductRepository.SearchedRowsAsync(productResourceParameter);
             var productDtos = _mapper.Map<IEnumerable<ProductDto>>(products);
             return (productDtos);
+        }
+        public async Task DeleteProductAsync(int Id)
+        {
+            await _iProductRepository.DeleteAsync(Id);
+        }
+
+        public async Task PatchProductAsync(int Id, JsonPatchDocument<ProductDtoForUpdate> patchDocument)
+        {
+            try
+            {
+                var Product = await _iProductRepository.findbyIdAsync(Id);
+
+                var ProductForUpdateDto = _mapper.Map<ProductDtoForUpdate>(Product);
+                patchDocument.ApplyTo(ProductForUpdateDto);
+
+                _mapper.Map(ProductForUpdateDto, Product);
+                _iProductRepository.Edit(Product);
+
+                await _iProductRepository.SaveAsync();
+            }
+            catch (Exception)
+            {
+                throw new NotFoundException();
+            }
+        }
+
+        public async Task EditProductAsync(int Id, ProductDtoForUpdate product)
+        {
+            try
+            {
+                var Product = await _iProductRepository.findbyIdAsync(Id);
+
+               // var ProductForUpdateDto = _mapper.Map<ProductDtoForUpdate>(Product);
+               
+                _mapper.Map(product, Product);
+                _iProductRepository.Edit(Product);
+
+                await _iProductRepository.SaveAsync();
+            }
+            catch (Exception)
+            {
+                throw new NotFoundException();
+            }
         }
     }
 }
